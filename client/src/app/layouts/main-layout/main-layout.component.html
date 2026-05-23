@@ -1,0 +1,121 @@
+<div class="app-layout" [class.sidenav-collapsed]="!isSidenavOpen">
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.open]="isSidenavOpen">
+    <div class="sidebar-header">
+      <div class="logo-section" *ngIf="isSidenavOpen">
+        <div class="logo-icon">
+          <mat-icon>verified_user</mat-icon>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">MployCheck</span>
+          <span class="logo-sub">Verification Portal</span>
+        </div>
+      </div>
+      <div class="logo-collapsed" *ngIf="!isSidenavOpen">
+        <div class="logo-icon small">
+          <mat-icon>verified_user</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        *ngFor="let item of filteredNavItems"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        class="nav-item"
+        [matTooltip]="!isSidenavOpen ? item.label : ''"
+        matTooltipPosition="right"
+        (click)="isMobile && toggleSidenav()"
+      >
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span class="nav-label" *ngIf="isSidenavOpen">{{ item.label }}</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer" *ngIf="isSidenavOpen">
+      <div class="user-card">
+        <div class="avatar">{{ userInitials }}</div>
+        <div class="user-info">
+          <span class="user-name">{{ authService.currentUser?.name }}</span>
+          <span class="user-role">{{ authService.currentUser?.role }}</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile overlay -->
+  <div
+    class="sidebar-overlay"
+    *ngIf="isMobile && isSidenavOpen"
+    (click)="toggleSidenav()"
+  ></div>
+
+  <!-- Main content area -->
+  <div class="main-content">
+    <!-- Top Navbar -->
+    <header class="top-navbar">
+      <div class="navbar-left">
+        <button mat-icon-button (click)="toggleSidenav()" class="menu-toggle" id="menu-toggle">
+          <mat-icon>{{ isSidenavOpen ? 'menu_open' : 'menu' }}</mat-icon>
+        </button>
+      </div>
+
+      <div class="navbar-right">
+        <!-- Theme Toggle -->
+        <button
+          mat-icon-button
+          (click)="themeService.toggle()"
+          [matTooltip]="themeService.isDark ? 'Light Mode' : 'Dark Mode'"
+          class="theme-toggle"
+          id="theme-toggle"
+        >
+          <mat-icon>{{ themeService.isDark ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
+
+        <!-- User Menu -->
+        <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu-btn" id="user-menu">
+          <div class="navbar-avatar">{{ userInitials }}</div>
+        </button>
+        <mat-menu #userMenu="matMenu" class="user-dropdown">
+          <div class="menu-header">
+            <div class="menu-avatar">{{ userInitials }}</div>
+            <div class="menu-user-info">
+              <span class="menu-name">{{ authService.currentUser?.name }}</span>
+              <span class="menu-email">{{ authService.currentUser?.email }}</span>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()" id="logout-btn">
+            <mat-icon>logout</mat-icon>
+            <span>Sign Out</span>
+          </button>
+        </mat-menu>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div class="toast-container">
+    <div
+      *ngFor="let toast of toasts"
+      class="toast"
+      [ngClass]="'toast-' + toast.type"
+    >
+      <mat-icon class="toast-icon">
+        {{ toast.type === 'success' ? 'check_circle' :
+           toast.type === 'error' ? 'error' :
+           toast.type === 'warning' ? 'warning' : 'info' }}
+      </mat-icon>
+      <span class="toast-message">{{ toast.message }}</span>
+      <button mat-icon-button class="toast-close" (click)="dismissToast(toast.id)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

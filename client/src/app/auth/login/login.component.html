@@ -1,0 +1,137 @@
+<div class="login-page">
+  <!-- Animated background -->
+  <div class="bg-gradient"></div>
+  <div class="bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+
+  <div class="login-container">
+    <!-- Branding -->
+    <div class="brand-section">
+      <div class="brand-icon">
+        <mat-icon>verified_user</mat-icon>
+      </div>
+      <h1 class="brand-title">MployCheck</h1>
+      <p class="brand-subtitle">Employee Verification Portal</p>
+    </div>
+
+    <!-- Login Card -->
+    <mat-card class="login-card" appearance="outlined">
+      <mat-card-content>
+        <h2 class="card-title">Welcome back</h2>
+        <p class="card-subtitle">Sign in to your account to continue</p>
+
+        <!-- Error Message -->
+        <div class="error-banner" *ngIf="errorMessage">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email Address</mat-label>
+            <input
+              matInput
+              formControlName="email"
+              type="email"
+              placeholder="Enter your email"
+              autocomplete="email"
+              id="login-email"
+            />
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+              Email is required
+            </mat-error>
+            <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+              Please enter a valid email
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              formControlName="password"
+              [type]="hidePassword ? 'password' : 'text'"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              id="login-password"
+            />
+            <mat-icon matPrefix>lock</mat-icon>
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="hidePassword = !hidePassword"
+              [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+            >
+              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+              Password is required
+            </mat-error>
+            <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+              Password must be at least 6 characters
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Role</mat-label>
+            <mat-select formControlName="role" id="login-role" panelClass="login-select-panel">
+              <mat-option value="General User">General User</mat-option>
+              <mat-option value="Admin">Admin</mat-option>
+            </mat-select>
+            <mat-icon matPrefix>shield</mat-icon>
+            <mat-error *ngIf="loginForm.get('role')?.hasError('required')">
+              Please select a role
+            </mat-error>
+          </mat-form-field>
+
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            class="login-button"
+            [disabled]="isLoading"
+            id="login-submit"
+          >
+            <mat-spinner *ngIf="isLoading" diameter="20" class="spinner"></mat-spinner>
+            <span *ngIf="!isLoading">Sign In</span>
+            <span *ngIf="isLoading">Signing in...</span>
+          </button>
+        </form>
+
+        <!-- Demo Credentials -->
+        <div class="demo-section">
+          <p class="demo-title">Quick Demo Access</p>
+          <div class="demo-buttons">
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="fillDemo('admin')"
+              class="demo-btn admin-btn"
+              id="demo-admin"
+            >
+              <mat-icon>admin_panel_settings</mat-icon>
+              Admin Login
+            </button>
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="fillDemo('user')"
+              class="demo-btn user-btn"
+              id="demo-user"
+            >
+              <mat-icon>person</mat-icon>
+              User Login
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <p class="footer-text">© 2024 MployCheck — Secure Verification Platform</p>
+  </div>
+</div>

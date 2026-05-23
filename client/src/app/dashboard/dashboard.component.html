@@ -1,0 +1,189 @@
+<div class="dashboard">
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <div class="welcome-text">
+      <h1>{{ getGreeting() }}, {{ authService.currentUser?.name }} 👋</h1>
+      <p>Here's what's happening with your verification portal today.</p>
+    </div>
+    <div class="welcome-badge">
+      <mat-icon>shield</mat-icon>
+      <span>{{ authService.currentUser?.role }}</span>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="skeleton-grid">
+      <div class="skeleton-card" *ngFor="let i of [1,2,3,4]">
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-line long"></div>
+        <div class="skeleton-line medium"></div>
+      </div>
+    </div>
+    <div class="skeleton-table">
+      <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]">
+        <div class="skeleton-cell" *ngFor="let j of [1,2,3,4]"></div>
+      </div>
+    </div>
+    <div class="loading-overlay">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading dashboard data...</p>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-state" *ngIf="error && !isLoading">
+    <mat-icon>cloud_off</mat-icon>
+    <h3>Unable to Load Data</h3>
+    <p>{{ error }}</p>
+    <button mat-flat-button color="primary" (click)="loadDashboardData()">
+      <mat-icon>refresh</mat-icon>
+      Retry
+    </button>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard-content" *ngIf="stats && !isLoading && !error">
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <mat-card class="stat-card total">
+        <div class="stat-icon-wrap">
+          <mat-icon>assignment</mat-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats.total }}</span>
+          <span class="stat-label">Total Records</span>
+        </div>
+        <div class="stat-trend up">
+          <mat-icon>trending_up</mat-icon>
+          <span>Active</span>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card verified">
+        <div class="stat-icon-wrap">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats.verified }}</span>
+          <span class="stat-label">Verified</span>
+        </div>
+        <div class="stat-trend up">
+          <mat-icon>trending_up</mat-icon>
+          <span>{{ verificationRate }}%</span>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card pending">
+        <div class="stat-icon-wrap">
+          <mat-icon>hourglass_empty</mat-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats.pending }}</span>
+          <span class="stat-label">Pending</span>
+        </div>
+        <div class="stat-trend neutral">
+          <mat-icon>schedule</mat-icon>
+          <span>In Progress</span>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card rejected">
+        <div class="stat-icon-wrap">
+          <mat-icon>cancel</mat-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats.rejected }}</span>
+          <span class="stat-label">Rejected</span>
+        </div>
+        <div class="stat-trend down">
+          <mat-icon>trending_down</mat-icon>
+          <span>Flagged</span>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Charts & Activity Row -->
+    <div class="content-grid">
+      <!-- Verification Breakdown -->
+      <mat-card class="chart-card">
+        <div class="card-header">
+          <h3>Verification Breakdown</h3>
+          <span class="card-subtitle">By company</span>
+        </div>
+        <div class="chart-bars">
+          <div class="bar-item" *ngFor="let company of stats.byCompany; let i = index">
+            <div class="bar-label">
+              <span class="bar-name">{{ company._id }}</span>
+              <span class="bar-count">{{ company.count }}</span>
+            </div>
+            <div class="bar-track">
+              <div
+                class="bar-fill"
+                [style.width.%]="(company.count / stats.total) * 100"
+                [class]="'bar-color-' + i"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- By Type -->
+      <mat-card class="chart-card">
+        <div class="card-header">
+          <h3>By Verification Type</h3>
+          <span class="card-subtitle">Distribution</span>
+        </div>
+        <div class="type-grid">
+          <div class="type-item" *ngFor="let type of stats.byType; let i = index">
+            <div class="type-dot" [class]="'dot-color-' + (i % 5)"></div>
+            <span class="type-name">{{ type._id }}</span>
+            <span class="type-count">{{ type.count }}</span>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Recent Activity -->
+    <mat-card class="recent-card">
+      <div class="card-header">
+        <h3>Recent Activity</h3>
+        <a mat-button color="primary" routerLink="/records" class="view-all">
+          View All
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
+      </div>
+      <div class="recent-table-wrap">
+        <table class="recent-table">
+          <thead>
+            <tr>
+              <th>Employee</th>
+              <th>Company</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of recentRecords">
+              <td>
+                <div class="employee-cell">
+                  <div class="emp-avatar">{{ record.employeeName.charAt(0) }}</div>
+                  <span>{{ record.employeeName }}</span>
+                </div>
+              </td>
+              <td>{{ record.company }}</td>
+              <td>{{ record.verificationType }}</td>
+              <td>
+                <span class="status-chip" [ngClass]="getStatusClass(record.status)">
+                  {{ record.status }}
+                </span>
+              </td>
+              <td>{{ record.submittedDate | date:'mediumDate' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </mat-card>
+  </div>
+</div>
