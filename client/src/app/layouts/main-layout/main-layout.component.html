@@ -41,6 +41,24 @@
           <span class="user-role">{{ authService.currentUser?.role }}</span>
         </div>
       </div>
+      <button mat-stroked-button class="logout-btn" (click)="logout()" id="sidebar-logout">
+        <mat-icon>logout</mat-icon>
+        <span>Sign Out</span>
+      </button>
+    </div>
+
+    <!-- Collapsed sidebar logout -->
+    <div class="sidebar-footer-collapsed" *ngIf="!isSidenavOpen">
+      <button
+        mat-icon-button
+        (click)="logout()"
+        matTooltip="Sign Out"
+        matTooltipPosition="right"
+        class="logout-icon-btn"
+        id="sidebar-logout-collapsed"
+      >
+        <mat-icon>logout</mat-icon>
+      </button>
     </div>
   </aside>
 

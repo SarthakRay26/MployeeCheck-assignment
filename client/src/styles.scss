@@ -165,45 +165,41 @@ body {
 }
 
 // ─── Login page mat-select panel override ─────────────
-// The overlay panel is rendered at body level, outside the component,
-// so dark styling must be applied globally with a custom panel class.
-// Ensure CDK overlays are always on top (mat-select, dialogs, etc.)
+// Panel renders via CDK overlay at body level.
+// No backdrop-filter — it makes the panel invisible on transparent overlays.
 .cdk-overlay-container {
   z-index: 9999 !important;
 }
 
 .login-select-panel {
-  background: rgba(30, 27, 75, 0.95) !important;
-  backdrop-filter: blur(24px) !important;
+  background: #1e1b4b !important;           // solid deep indigo — fully opaque
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
   border-radius: 12px !important;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6) !important;
+  overflow: hidden !important;
+}
 
-  .mat-mdc-option {
-    color: rgba(255, 255, 255, 0.85) !important;
+// Target every layer Angular Material renders inside the panel
+.login-select-panel .mat-mdc-option,
+.login-select-panel .mdc-list-item__primary-text,
+.login-select-panel .mat-mdc-option .mdc-list-item__primary-text {
+  color: #e0e7ff !important;
+}
 
-    &:hover,
-    &:focus,
-    &.mat-mdc-option-active {
-      background: rgba(99, 102, 241, 0.2) !important;
-    }
+.login-select-panel .mat-mdc-option:hover .mdc-list-item__primary-text,
+.login-select-panel .mat-mdc-option.mat-mdc-option-active .mdc-list-item__primary-text {
+  color: #fff !important;
+}
 
-    &.mdc-list-item--selected {
-      background: rgba(99, 102, 241, 0.3) !important;
-      color: #fff !important;
-    }
+.login-select-panel .mat-mdc-option:hover,
+.login-select-panel .mat-mdc-option:focus {
+  background: rgba(99, 102, 241, 0.25) !important;
+}
 
-    .role-option {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+.login-select-panel .mat-mdc-option.mdc-list-item--selected {
+  background: rgba(99, 102, 241, 0.35) !important;
+}
 
-      mat-icon {
-        font-size: 16px;
-        width: 16px;
-        height: 16px;
-        color: rgba(255, 255, 255, 0.6);
-      }
-    }
-  }
+.login-select-panel .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text {
+  color: #fff !important;
 }

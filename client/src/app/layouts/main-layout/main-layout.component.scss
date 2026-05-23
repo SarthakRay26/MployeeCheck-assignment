@@ -159,6 +159,49 @@ $transition-speed: 0.3s;
 .sidebar-footer {
   padding: 16px;
   border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.logout-btn {
+  width: 100%;
+  border-radius: 10px !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  color: #ef4444 !important;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.08) !important;
+    border-color: #ef4444 !important;
+  }
+}
+
+.sidebar-footer-collapsed {
+  padding: 12px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+}
+
+.logout-icon-btn {
+  color: #ef4444 !important;
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.1) !important;
+  }
 }
 
 .user-card {
