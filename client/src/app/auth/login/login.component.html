@@ -77,17 +77,38 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Role</mat-label>
-            <mat-select formControlName="role" id="login-role" panelClass="login-select-panel">
-              <mat-option value="General User">General User</mat-option>
-              <mat-option value="Admin">Admin</mat-option>
-            </mat-select>
-            <mat-icon matPrefix>shield</mat-icon>
-            <mat-error *ngIf="loginForm.get('role')?.hasError('required')">
+          <!-- Role Selector — custom toggle, no CDK overlay -->
+          <div class="role-selector" [class.role-error]="loginForm.get('role')?.invalid && loginForm.get('role')?.touched">
+            <p class="role-label">
+              <mat-icon>shield</mat-icon>
+              Select Role
+            </p>
+            <div class="role-options">
+              <button
+                type="button"
+                class="role-option-btn"
+                [class.active]="loginForm.get('role')?.value === 'General User'"
+                (click)="loginForm.get('role')?.setValue('General User')"
+                id="role-general-user"
+              >
+                <mat-icon>person</mat-icon>
+                <span>General User</span>
+              </button>
+              <button
+                type="button"
+                class="role-option-btn"
+                [class.active]="loginForm.get('role')?.value === 'Admin'"
+                (click)="loginForm.get('role')?.setValue('Admin')"
+                id="role-admin"
+              >
+                <mat-icon>admin_panel_settings</mat-icon>
+                <span>Admin</span>
+              </button>
+            </div>
+            <span class="role-error-msg" *ngIf="loginForm.get('role')?.hasError('required') && loginForm.get('role')?.touched">
               Please select a role
-            </mat-error>
-          </mat-form-field>
+            </span>
+          </div>
 
           <button
             mat-flat-button

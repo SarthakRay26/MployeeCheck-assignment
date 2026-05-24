@@ -216,32 +216,87 @@
       .mdc-floating-label {
         color: rgba(255, 255, 255, 0.5) !important;
       }
-
-      // mat-select: selected value text + arrow
-      .mat-mdc-select-value,
-      .mat-mdc-select-value-text,
-      .mat-mdc-select-placeholder {
-        color: #fff !important;
-      }
-
-      .mat-mdc-select-arrow {
-        color: rgba(255, 255, 255, 0.5) !important;
-      }
     }
   }
 }
 
-// Role option layout inside mat-select panel
-.role-option {
-  display: inline-flex;
+// Custom role selector — replaces mat-select
+.role-selector {
+  margin-bottom: 8px;
+
+  .role-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    mat-icon {
+      font-size: 15px;
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  .role-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  &.role-error .role-options .role-option-btn {
+    border-color: rgba(239, 68, 68, 0.5) !important;
+  }
+
+  .role-error-msg {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #ef4444;
+  }
+}
+
+.role-option-btn {
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
 
   mat-icon {
-    font-size: 16px;
-    width: 16px;
-    height: 16px;
-    vertical-align: middle;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.4);
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  &.active {
+    background: rgba(99, 102, 241, 0.25);
+    border-color: #6366f1;
+    color: #fff;
+    box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.4), 0 4px 12px rgba(99, 102, 241, 0.2);
+
+    mat-icon {
+      color: #a5b4fc;
+    }
   }
 }
 
