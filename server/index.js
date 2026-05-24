@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const path = require('path');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
 
@@ -12,15 +13,16 @@ const recordRoutes = require('./routes/recordRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const isProduction = process.env.NODE_ENV === 'production';
 
 // ─── Core Middleware ──────────────────────────────────────
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow any localhost origin (any port) in development
     if (!origin || origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1')) {
       callback(null, true);
-    } else if (process.env.NODE_ENV === 'production' && process.env.ALLOWED_ORIGIN) {
-      callback(null, process.env.ALLOWED_ORIGIN === origin);
+    } else if (process.env.ALLOWED_ORIGIN) {
+      const allowed = process.env.ALLOWED_ORIGIN.split(',').map(o => o.trim());
+      callback(null, allowed.includes(origin));
     } else {
       callback(null, true);
     }
@@ -30,9 +32,11 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Request logging in development
-if (process.env.NODE_ENV !== 'production') {
+// Request logging
+if (!isProduction) {
   app.use(morgan('dev'));
+} else {
+  app.use(morgan('combined'));
 }
 
 // ─── API Routes ───────────────────────────────────────────
@@ -49,6 +53,21 @@ app.get('/api/health', (req, res) => {
     environment: process.env.NODE_ENV,
   });
 });
+
+// ─── Serve Angular Build in Production ────────────────────
+if (isProduction) {
+  const clientBuildPath = path.join(
+    __dirname, '..', 'client', 'dist', 'employee-verification-portal', 'browser'
+  );
+  app.use(express.static(clientBuildPath));
+
+  // All non-API routes → index.html (Angular SPA routing)
+  app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api')) {
+      res.sendFile(path.join(clientBuildPath, 'index.html'));
+    }
+  });
+}
 
 // 404 handler
 app.use((req, res) => {
