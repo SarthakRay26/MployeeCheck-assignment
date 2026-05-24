@@ -1,4 +1,16 @@
-<div class="login-page">
+<div class="login-page" [class.light]="!themeService.isDark">
+  <!-- Theme toggle — top right -->
+  <button
+    class="theme-toggle-btn"
+    type="button"
+    (click)="themeService.toggle()"
+    [matTooltip]="themeService.isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+    matTooltipPosition="left"
+    id="login-theme-toggle"
+  >
+    <mat-icon>{{ themeService.isDark ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+
   <!-- Animated background -->
   <div class="bg-gradient"></div>
   <div class="bg-shapes">
