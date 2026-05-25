@@ -10,6 +10,13 @@
   <img src="https://img.shields.io/badge/MongoDB-Atlas-brightgreen?style=flat-square&logo=mongodb" alt="MongoDB">
   <img src="https://img.shields.io/badge/Material-UI-blue?style=flat-square&logo=material-design" alt="Material UI">
   <img src="https://img.shields.io/badge/JWT-Auth-orange?style=flat-square&logo=json-web-tokens" alt="JWT Auth">
+  <img src="https://img.shields.io/badge/Live-Demo-6366f1?style=flat-square&logo=render" alt="Live Demo">
+</p>
+
+<p align="center">
+  <a href="https://mployeecheck-assignment.onrender.com" target="_blank">
+    <strong>🚀 Live Demo → https://mployeecheck-assignment.onrender.com</strong>
+  </a>
 </p>
 
 ---
@@ -93,6 +100,25 @@ MployCheck-Assignment/
 ├── instructions.txt                 # Project requirements
 └── README.md
 ```
+
+---
+
+## 🌐 Live Demo
+
+> **Hosted on Render (Free Tier)**
+> The app may take ~30 seconds to load on first visit if the server has been idle.
+
+| | URL |
+|-|-----|
+| 🔗 **Live App** | https://mployeecheck-assignment.onrender.com |
+| 🔌 **API Health** | https://mployeecheck-assignment.onrender.com/api/health |
+
+### Demo Credentials
+
+| Role | Email | Password |
+|------|-------|----------|
+| 👑 Admin | admin@demo.com | Admin@123 |
+| 👤 General User | user@demo.com | User@123 |
 
 ---
 
